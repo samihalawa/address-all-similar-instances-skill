@@ -1,0 +1,4 @@
+interface:
+  display_name: "Address Similar Instances"
+  short_description: "Expand one proven fix into a same-class sweep across the real affected surface"
+  default_prompt: "Use $address-all-similar-instances-skill when the user is frustrated that only one instance was fixed and they want the same class of issue addressed everywhere relevant. Start from the first proven issue, define the exact failure pattern, search the real codebase and real user flow for sibling instances of that same pattern, fix the full high-confidence set, verify the important surfaces, and do not stop while a likely same-class issue remains unaddressed."
