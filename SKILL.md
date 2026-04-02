@@ -90,6 +90,27 @@ Always combine several of these:
 - inspect analytics / tracking twins on client and server
 - inspect visible UI states in the running app when feasible
 
+## Anti-Anchoring Rule
+
+Do not stop because grep did not find the exact same selector, prop name, or string.
+
+If the exact token search is sparse, broaden the search using:
+
+- semantic equivalents
+- sibling wrappers and shared components
+- nearby routes in the same feature cluster
+- same state pattern with different labels
+- same user action point with different implementation details
+- same workflow stage expressed through different helpers or props
+
+Bad sweep:
+
+- "I did not find the same selector, so there are no similar issues."
+
+Good sweep:
+
+- "I did not find the same selector, so I checked the same CTA class, the same route family, the same wrapper component, and adjacent monetization surfaces for the same user-facing failure class."
+
 ## Hierarchy Rules
 
 When a seed issue is found, walk outward in this order:
@@ -109,6 +130,30 @@ Do not jump to repo-wide cleanup before exhausting the nearest hierarchy.
 - Stay anchored to the proven user annoyance.
 - Do not turn one issue into a random cleanup pass.
 - If something is only visually or semantically similar but not the same class, note it and move on.
+
+## Parallelization Rule
+
+If the same-class sweep is large, use parallel agents instead of doing a slow serial pass.
+
+Use:
+
+- [$parallel-task-spark](/Users/samihalawa/.agents/skills/parallel-task-spark/SKILL.md)
+  - when you can express the same-class sweep as a dependency-aware plan with clear tasks
+- [$super-swarm-spark](/Users/samihalawa/.agents/skills/super-swarm-spark/SKILL.md)
+  - when there are many mostly independent sibling instances and speed matters more than dependency ordering
+
+When parallelizing:
+
+1. Create a short plan for the same-class sweep.
+2. Group work by hierarchy:
+   - route family
+   - component family
+   - client/server twin
+   - desktop/mobile variant
+3. Give every subtask exact paths and the same failure-class definition.
+4. Reserve a final integration pass for conflict cleanup, verification, and any missed sibling surfaces.
+
+Do not parallelize tiny sweeps where local execution is faster.
 
 ## Verification Standard
 
@@ -141,6 +186,7 @@ If item 7 still has a credible answer, keep going.
 - Prefer execution over theorizing.
 - Report the cluster you checked, not just the first file.
 - Do not stop with generic next steps if high-confidence related work remains.
+- If the cluster is large enough for parallel work, say that you are scaling the sweep with `parallel-task-spark` or `super-swarm-spark` instead of hand-waving about doing it later.
 
 ## Example Triggers
 
