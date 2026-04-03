@@ -24,6 +24,25 @@ Do not stop at literal duplicates.
 
 The first proven issue is only the seed. Your real job is to infer the broader class of problem, then address the closest related instances across the same hierarchy, workflow, component family, and user journey.
 
+## Conversation Understanding Layer
+
+Before sweeping the code, understand what the user is actually trying to mean.
+
+When the thread is long, typo-heavy, correction-heavy, or clearly off-track, use the discipline from [$conversation-analyzer](/Users/samihalawa/.claude/skills/conversation-analyzer/SKILL.md):
+
+- read prior user messages sequentially, one by one
+- do not skip corrections
+- extract:
+  - explicit request
+  - implicit intent
+  - frustration signals
+  - constraints
+  - examples and context
+- trust user corrections over earlier assistant claims
+- compress the conversation into a short internal execution contract before touching code
+
+Do not require the user to express the issue perfectly in technical terms. Infer responsibly from the full thread.
+
 ## What Counts As "Similar"
 
 Similarity is not just exact code duplication.
@@ -48,20 +67,21 @@ Examples:
 
 ## Required Workflow
 
-1. Lock onto the first proven issue.
-2. Name the broader failure class in general terms, not file-specific terms.
-3. Run a first-pass programmatic discovery sweep across the real codebase.
-4. Build an adjacency map before editing.
-5. Search the code and UI hierarchy for the nearest related surfaces.
-6. Split findings into:
+1. Read prior user messages sequentially when the thread is relevant, messy, or correction-heavy.
+2. Lock onto the first proven issue.
+3. Name the broader failure class in general terms, not file-specific terms.
+4. Run a first-pass programmatic discovery sweep across the real codebase.
+5. Build an adjacency map before editing.
+6. Search the code and UI hierarchy for the nearest related surfaces.
+7. Split findings into:
    - literal duplicates
    - same-class sibling instances
    - same-workflow adjacent instances
    - lower-confidence lookalikes
-7. Fix the full high-confidence set.
-8. Verify the important surfaces.
-9. Re-ask the completion question from the user's perspective.
-10. Only stop when the remaining related inventory is empty, low-confidence, intentionally out of scope, or blocked.
+8. Fix the full high-confidence set.
+9. Verify the important surfaces.
+10. Re-ask the completion question from the user's perspective.
+11. Only stop when the remaining related inventory is empty, low-confidence, intentionally out of scope, or blocked.
 
 ## First-Pass Programmatic Discovery Sweep
 
@@ -228,6 +248,7 @@ If item 7 still has a credible answer, keep going.
 - Tell the user briefly that you are sweeping the broader failure class, not just exact duplicates.
 - Keep updates short.
 - Prefer execution over theorizing.
+- Mention when you re-read prior messages to recover the user's real meaning.
 - Mention that you started with a fast programmatic discovery sweep before the manual adjacency pass.
 - Report the cluster you checked, not just the first file.
 - Do not stop with generic next steps if high-confidence related work remains.
