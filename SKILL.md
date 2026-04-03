@@ -50,17 +50,56 @@ Examples:
 
 1. Lock onto the first proven issue.
 2. Name the broader failure class in general terms, not file-specific terms.
-3. Build an adjacency map before editing.
-4. Search the code and UI hierarchy for the nearest related surfaces.
-5. Split findings into:
+3. Run a first-pass programmatic discovery sweep across the real codebase.
+4. Build an adjacency map before editing.
+5. Search the code and UI hierarchy for the nearest related surfaces.
+6. Split findings into:
    - literal duplicates
    - same-class sibling instances
    - same-workflow adjacent instances
    - lower-confidence lookalikes
-6. Fix the full high-confidence set.
-7. Verify the important surfaces.
-8. Re-ask the completion question from the user's perspective.
-9. Only stop when the remaining related inventory is empty, low-confidence, intentionally out of scope, or blocked.
+7. Fix the full high-confidence set.
+8. Verify the important surfaces.
+9. Re-ask the completion question from the user's perspective.
+10. Only stop when the remaining related inventory is empty, low-confidence, intentionally out of scope, or blocked.
+
+## First-Pass Programmatic Discovery Sweep
+
+Before manual browsing, try to surface the related cluster programmatically.
+
+Always do a few smart first-pass attempts using the real repo:
+
+- `rg` for:
+  - selectors
+  - prop names
+  - event names
+  - helper names
+  - repeated copy strings
+  - guard and disabled logic
+  - distinctive class names
+  - nearby literal fragments from the seed fix
+- `mdfind` when filename or broader content discovery on macOS is useful
+- `tree -I node_modules` on the relevant source subtree to understand hierarchy
+- inspect imports and exports around the touched files
+- inspect callers and callees of the adjusted functions, hooks, or helpers
+- inspect sibling folders and adjacent route files in the same feature cluster
+- use semantic-search-style tools when available to find conceptually similar code even when exact text differs
+
+Treat this as the first expansion pass, not the only pass.
+These searches are useful heuristics, not proof.
+
+If this sweep finds promising related files, inspect them first.
+If this sweep finds nothing useful, that is not a stop condition. Continue with the broader adjacency and hierarchy search manually.
+
+## First-Pass Discovery Rules
+
+- Start from the code actually changed or proven broken.
+- Extract the most distinctive small code fragments from that seed area.
+- Prefer several narrow searches over one vague search.
+- Search both the current file family and the wider codebase.
+- Use the discovery sweep to generate a candidate file list quickly.
+- Then read those files and decide whether they are literal duplicates, same-class siblings, or only loose lookalikes.
+- Treat misses as possible false negatives and hits as possible false positives until you inspect the code.
 
 ## Adjacency Map Requirement
 
@@ -82,17 +121,22 @@ Do not rely on intuition alone. Use direct discovery.
 Always combine several of these:
 
 - grep for the same prop, helper, guard, event name, copy string, CSS token, or disabled pattern
+- grep for distinctive small code fragments from the seed fix
+- inspect the source tree around the seed area with `tree -I node_modules`
+- use `mdfind` when broader filename/content discovery is likely helpful
 - inspect imports and exports around the seed issue
 - inspect callers and callees of the implicated helper or component
 - inspect sibling routes in the same product cluster
 - inspect variants in the same page family
 - inspect wrapper components that standardize the behavior
 - inspect analytics / tracking twins on client and server
+- use semantic-search-style tools when available to find conceptually similar code
 - inspect visible UI states in the running app when feasible
 
 ## Anti-Anchoring Rule
 
 Do not stop because grep did not find the exact same selector, prop name, or string.
+Do not over-trust grep hits either; verify whether the returned files are actually the same class of issue.
 
 If the exact token search is sparse, broaden the search using:
 
@@ -184,6 +228,7 @@ If item 7 still has a credible answer, keep going.
 - Tell the user briefly that you are sweeping the broader failure class, not just exact duplicates.
 - Keep updates short.
 - Prefer execution over theorizing.
+- Mention that you started with a fast programmatic discovery sweep before the manual adjacency pass.
 - Report the cluster you checked, not just the first file.
 - Do not stop with generic next steps if high-confidence related work remains.
 - If the cluster is large enough for parallel work, say that you are scaling the sweep with `parallel-task-spark` or `super-swarm-spark` instead of hand-waving about doing it later.
