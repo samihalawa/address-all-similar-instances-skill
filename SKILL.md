@@ -56,11 +56,13 @@ Treat issues as similar when they share one or more of these:
 - same route family or workflow step
 - same analytics / validation / feedback blind spot
 - same mobile-vs-desktop divergence
+- same permanent negative-state or feature-gating pattern caused by a transient failure
 - same "user would perceive this as the same kind of annoyance" test
 
 Examples:
 
 - not just one silent disabled CTA, but any nearby CTA that blocks without clear action-point feedback
+- not just one account or platform hidden after a failed API call, but any nearby rotation list, dropdown, status badge, feature flag, or eligibility gate that encoded a transient error as product truth
 - not just one copy block, but the same kind of redundant or explanatory wording across sibling flows
 - not just one broken event capture, but the same fallback pattern in client/server twins
 - not just one posting-form friction point, but the same "buried requirement / late surprise / weak guidance" pattern across adjacent form sections
@@ -73,15 +75,16 @@ Examples:
 4. Run a first-pass programmatic discovery sweep across the real codebase.
 5. Build an adjacency map before editing.
 6. Search the code and UI hierarchy for the nearest related surfaces.
-7. Split findings into:
+7. When the seed issue is an overzealous gate, inspect sibling disabled/hidden/unavailable states, account/platform rotation filters, status badges, feature flags, and dropdown option builders before declaring the class closed.
+8. Split findings into:
    - literal duplicates
    - same-class sibling instances
    - same-workflow adjacent instances
    - lower-confidence lookalikes
-8. Fix the full high-confidence set.
-9. Verify the important surfaces.
-10. Re-ask the completion question from the user's perspective.
-11. Only stop when the remaining related inventory is empty, low-confidence, intentionally out of scope, or blocked.
+9. Fix the full high-confidence set.
+10. Verify the important surfaces.
+11. Re-ask the completion question from the user's perspective.
+12. Only stop when the remaining related inventory is empty, low-confidence, intentionally out of scope, or blocked.
 
 ## First-Pass Programmatic Discovery Sweep
 
