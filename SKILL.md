@@ -58,6 +58,8 @@ Treat issues as similar when they share one or more of these:
 - same mobile-vs-desktop divergence
 - same permanent negative-state or feature-gating pattern caused by a transient failure
 - same "user would perceive this as the same kind of annoyance" test
+- same operational lesson duplicated across an owning skill, its references,
+  authoritative source repository, and installed copies
 
 Examples:
 
@@ -81,6 +83,11 @@ Examples:
    - same-class sibling instances
    - same-workflow adjacent instances
    - lower-confidence lookalikes
+   For skill or runbook updates, include the authoritative Git source,
+   `SKILL.md`, `agents/openai.yaml`, directly linked references, adjacent
+   user-owned skills that execute the same failure class, and physical installed
+   copies after resolving symlinks. Do not edit generated, cached, bundled, or
+   vendor-managed copies as the source of truth.
 9. Fix the full high-confidence set.
 10. Verify the important surfaces.
 11. Re-ask the completion question from the user's perspective.
