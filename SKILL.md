@@ -43,6 +43,29 @@ When the thread is long, typo-heavy, correction-heavy, or clearly off-track, use
 
 Do not require the user to express the issue perfectly in technical terms. Infer responsibly from the full thread.
 
+## Mutation Authority Gate
+
+Discovery may expand inspection, but it never expands mutation authority.
+Before creating, deleting, repointing, renaming, repairing, or publishing any
+external resource or product surface found during the sweep, freeze one row per
+candidate:
+
+`candidate | observed evidence | desired-state authority | relation to seed | action | proof`
+
+`desired-state authority` must be positive current evidence that the target
+belongs in the intended architecture: the user's current wording, canonical
+product configuration, or canonical deployment manifest/source. An existing or
+historical DNS record, redirect, certificate, cached response, browser render,
+traffic record, provider object, old document, or prior agent claim proves only
+that the target was observed; it does not authorize preserving, repairing, or
+recreating it.
+
+If positive authority is absent, keep the candidate in the inspection ledger
+and classify it as an unapproved cleanup candidate or current unknown. Do not
+mutate it. Continue every other authorized row without turning discovery into
+a permission loop. A current user correction overrides any contradictory
+historical artifact.
+
 ## What Counts As "Similar"
 
 Similarity is not just exact code duplication.
@@ -88,10 +111,12 @@ Examples:
    user-owned skills that execute the same failure class, and physical installed
    copies after resolving symlinks. Do not edit generated, cached, bundled, or
    vendor-managed copies as the source of truth.
-9. Fix the full high-confidence set.
-10. Verify the important surfaces.
-11. Re-ask the completion question from the user's perspective.
-12. Only stop when the remaining related inventory is empty, low-confidence, intentionally out of scope, or blocked.
+9. Freeze the mutation-authority row for every external target in the
+   high-confidence set; high similarity is not authority.
+10. Fix the full high-confidence authorized set.
+11. Verify the important surfaces.
+12. Re-ask the completion question from the user's perspective.
+13. Only stop when the remaining related inventory is empty, low-confidence, intentionally out of scope, unauthorized, or blocked.
 
 ## First-Pass Programmatic Discovery Sweep
 
